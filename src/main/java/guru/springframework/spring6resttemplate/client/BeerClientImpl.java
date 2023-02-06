@@ -1,5 +1,6 @@
 package guru.springframework.spring6resttemplate.client;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import guru.springframework.spring6resttemplate.model.BeerDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +35,21 @@ public class BeerClientImpl implements BeerClient {
                 restTemplate.getForEntity(BASE_URL+API_URL, Map.class);
 
 
+        ResponseEntity<JsonNode> jsonNodRespEntity =
+                restTemplate.getForEntity(BASE_URL+API_URL, JsonNode.class);
+
+        JsonNode jsonNode = jsonNodRespEntity.getBody().findPath("content");
+
         System.out.printf("The String Response Body: %s%n",stringRespEntity.getBody());
-        System.out.printf("The first Item of the Key 'content' in the Map Response Body%n: %s%n",mapRespEntity.getBody().get("content"));
+        System.out.printf("%nThe first Item of the Key 'content' in the Map Response Body:%n%s%n",mapRespEntity.getBody().get("content"));
+
+        System.out.println("\nThe items from the key 'content' of the JSON-Node:");
+
+        jsonNodRespEntity.getBody().findPath("content")
+                .elements().forEachRemaining(node ->
+                        System.out.println(node.get("beerName").asText()));
+
+        System.out.printf("%nThe content of the json-node:%n%s%n",jsonNode.toString());
 
         return null;
     }
