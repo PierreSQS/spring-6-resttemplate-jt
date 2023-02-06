@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 /**
  * Modified by Pierrot, 06.02.2023.
  */
@@ -25,10 +27,15 @@ public class BeerClientImpl implements BeerClient {
     public Page<BeerDTO> listBeers() {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
-        ResponseEntity<String> respEntity =
+        ResponseEntity<String> stringRespEntity =
                 restTemplate.getForEntity(BASE_URL+API_URL, String.class);
 
-        System.out.printf("The Response Body: %s%n",respEntity.getBody());
+        ResponseEntity<Map> mapRespEntity =
+                restTemplate.getForEntity(BASE_URL+API_URL, Map.class);
+
+
+        System.out.printf("The String Response Body: %s%n",stringRespEntity.getBody());
+        System.out.printf("The first Item of the Key 'content' in the Map Response Body%n: %s%n",mapRespEntity.getBody().get("content"));
 
         return null;
     }
