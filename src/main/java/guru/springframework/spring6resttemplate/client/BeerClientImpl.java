@@ -1,7 +1,7 @@
 package guru.springframework.spring6resttemplate.client;
 
 import guru.springframework.spring6resttemplate.model.BeerDTO;
-import guru.springframework.spring6resttemplate.model.RestPageImpl;
+import guru.springframework.spring6resttemplate.model.BeerDTOPageImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -26,8 +26,8 @@ public class BeerClientImpl implements BeerClient {
     public Page<BeerDTO> listBeers() {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
-        ResponseEntity<RestPageImpl> pageRespEntity =
-                restTemplate.getForEntity(BASE_URL+API_URL, RestPageImpl.class);
+        ResponseEntity<BeerDTOPageImpl> pageRespEntity =
+                restTemplate.getForEntity(BASE_URL+API_URL, BeerDTOPageImpl.class);
 
 
         return null;
