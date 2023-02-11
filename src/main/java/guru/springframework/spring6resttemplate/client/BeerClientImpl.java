@@ -19,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 public class BeerClientImpl implements BeerClient {
 
     private static final String API_URL = "/api/v1/beer";
-    private static final String BASE_URL = "http://localhost:8080";
     private final RestTemplateBuilder restTemplateBuilder;
 
     @Override
@@ -27,7 +26,7 @@ public class BeerClientImpl implements BeerClient {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
         ResponseEntity<BeerDTOPageImpl> pageRespEntity =
-                restTemplate.getForEntity(BASE_URL+API_URL, BeerDTOPageImpl.class);
+                restTemplate.getForEntity(API_URL, BeerDTOPageImpl.class);
 
 
         return null;
