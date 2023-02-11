@@ -1,7 +1,7 @@
 package guru.springframework.spring6resttemplate.client;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import guru.springframework.spring6resttemplate.model.BeerDTO;
+import guru.springframework.spring6resttemplate.model.RestPageImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 /**
  * Modified by Pierrot, 06.02.2023.
@@ -28,28 +26,9 @@ public class BeerClientImpl implements BeerClient {
     public Page<BeerDTO> listBeers() {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
-        ResponseEntity<String> stringRespEntity =
-                restTemplate.getForEntity(BASE_URL+API_URL, String.class);
+        ResponseEntity<RestPageImpl> pageRespEntity =
+                restTemplate.getForEntity(BASE_URL+API_URL, RestPageImpl.class);
 
-        ResponseEntity<Map> mapRespEntity =
-                restTemplate.getForEntity(BASE_URL+API_URL, Map.class);
-
-
-        ResponseEntity<JsonNode> jsonNodRespEntity =
-                restTemplate.getForEntity(BASE_URL+API_URL, JsonNode.class);
-
-        JsonNode jsonNode = jsonNodRespEntity.getBody().findPath("content");
-
-        System.out.printf("The String Response Body: %s%n",stringRespEntity.getBody());
-        System.out.printf("%nThe first Item of the Key 'content' in the Map Response Body:%n%s%n",mapRespEntity.getBody().get("content"));
-
-        System.out.println("\nThe items from the key 'content' of the JSON-Node:");
-
-        jsonNodRespEntity.getBody().findPath("content")
-                .elements().forEachRemaining(node ->
-                        System.out.println(node.get("beerName").asText()));
-
-        System.out.printf("%nThe content of the json-node:%n%s%n",jsonNode.toString());
 
         return null;
     }
