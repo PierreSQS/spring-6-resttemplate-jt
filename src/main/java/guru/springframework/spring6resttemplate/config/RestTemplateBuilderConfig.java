@@ -13,9 +13,9 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Configuration
 public class RestTemplateBuilderConfig {
 
-    @Value("${rest.template.username}")
+    @Value("user")
     private String username;
-    @Value("${rest.template.password}")
+    @Value("password")
     private String password;
     @Value("${rest.template.rootUrl}")
     String rootUrl;
@@ -25,12 +25,8 @@ public class RestTemplateBuilderConfig {
 
         assert rootUrl != null;
 
-        RestTemplateBuilder builder = configurer.configure(new RestTemplateBuilder());
-        DefaultUriBuilderFactory uriBuilderFactory = new
-                DefaultUriBuilderFactory(rootUrl);
-
-        RestTemplateBuilder restTempBuilderWithAuth = builder.basicAuthentication(username, password);
-
-        return restTempBuilderWithAuth.uriTemplateHandler(uriBuilderFactory);
+        return configurer.configure(new RestTemplateBuilder())
+                .basicAuthentication(username,password)
+                .uriTemplateHandler(new DefaultUriBuilderFactory(rootUrl));
     }
 }
