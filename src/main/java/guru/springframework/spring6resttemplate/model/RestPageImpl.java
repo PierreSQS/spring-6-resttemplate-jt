@@ -10,9 +10,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @JsonIgnoreProperties("pageable")
-public class RestPageImpl<T> extends PageImpl<T> {
+public class RestPageImpl<BeerDTO> extends PageImpl<BeerDTO> {
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public RestPageImpl(@JsonProperty("content") List<T> content,
+    public RestPageImpl(@JsonProperty("content") List<BeerDTO> content,
                         @JsonProperty("page") int page,
                         @JsonProperty("size") int size,
                         @JsonProperty("totalElements") int totalElements ) {
@@ -20,11 +20,11 @@ public class RestPageImpl<T> extends PageImpl<T> {
 
     }
 
-    public RestPageImpl(List<T> content, Pageable pageable, long total) {
+    public RestPageImpl(List<BeerDTO> content, Pageable pageable, long total) {
         super(content, pageable, total);
     }
 
-    public RestPageImpl(List<T> content) {
+    public RestPageImpl(List<BeerDTO> content) {
         super(content);
     }
 }
