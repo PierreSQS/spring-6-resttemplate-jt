@@ -13,6 +13,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.UUID;
+
 /**
  * Modified by Pierrot, 12.02.2023.
  */
@@ -22,6 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class BeerClientImpl implements BeerClient {
 
     private static final String BEER_API_URL = "/api/v1/beer";
+    private static final String BEER_API_ID_URL = "/api/v1/beer/{beerID}";
     private final RestTemplateBuilder restTemplateBuilder;
 
     @Override
@@ -74,4 +77,12 @@ public class BeerClientImpl implements BeerClient {
 
         return respEntityBody;
     }
+
+    @Override
+    public BeerDTO getBeerByID(UUID beerUUID) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        return restTemplate.getForObject(BEER_API_ID_URL,BeerDTO.class,beerUUID);
+    }
+
+
 }

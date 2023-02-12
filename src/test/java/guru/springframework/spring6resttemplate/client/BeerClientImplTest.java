@@ -45,4 +45,15 @@ class BeerClientImplTest {
 
         assertThat(beerDTOS.getContent()).hasSize(25);
     }
+
+    @Test
+    void getBeerByID() {
+        Page<BeerDTO> beerDTOS = beerClient.listBeers();
+
+        BeerDTO beerDTOToFind = beerDTOS.getContent().get(0);
+
+        BeerDTO beerByID = beerClient.getBeerByID(beerDTOToFind.getId());
+
+        assertThat(beerByID).isNotNull();
+    }
 }
