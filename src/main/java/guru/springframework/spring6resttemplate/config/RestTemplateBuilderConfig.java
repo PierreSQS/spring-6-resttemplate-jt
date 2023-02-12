@@ -18,6 +18,8 @@ public class RestTemplateBuilderConfig {
 
     @Bean
     RestTemplateBuilder restTemplateBuilder(RestTemplateBuilderConfigurer configurer) {
+        assert rootUrl != null;
+
         return configurer.configure(new RestTemplateBuilder())
                 .uriTemplateHandler(new DefaultUriBuilderFactory(rootUrl));
 

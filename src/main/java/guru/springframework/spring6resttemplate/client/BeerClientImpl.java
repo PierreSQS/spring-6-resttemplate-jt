@@ -28,7 +28,14 @@ public class BeerClientImpl implements BeerClient {
         ResponseEntity<BeerDTOPageImpl> pageRespEntity =
                 restTemplate.getForEntity(API_URL, BeerDTOPageImpl.class);
 
+        BeerDTOPageImpl respEntityBody = pageRespEntity.getBody();
+        if (respEntityBody != null) {
+            log.info("the amount of BeerDTOs in the response body-Page1: {}", respEntityBody.getContent().size());
+        } else {
+            log.info("no BeerDTOs found in the response body-Page1");
 
-        return null;
+        }
+
+        return respEntityBody;
     }
 }
