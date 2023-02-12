@@ -1,6 +1,7 @@
 package guru.springframework.spring6resttemplate.client;
 
 import guru.springframework.spring6resttemplate.model.BeerDTO;
+import guru.springframework.spring6resttemplate.model.BeerStyle;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,7 @@ class BeerClientImplTest {
     @Test
     void listBeers() {
 
-        Page<BeerDTO> beerDTOS = beerClient.listBeers(null);
+        Page<BeerDTO> beerDTOS = beerClient.listBeers();
 
         assertThat(beerDTOS.getContent()).hasSize(25);
     }
@@ -27,7 +28,20 @@ class BeerClientImplTest {
 
         String blacklager="IPA";
 
-        Page<BeerDTO> beerDTOS = beerClient.listBeers(blacklager);
+        Page<BeerDTO> beerDTOS = beerClient.listBeers(blacklager,null,
+                null,null,null);
+
+        assertThat(beerDTOS.getContent()).hasSize(25);
+    }
+    @Test
+    void listBeersByBeerStyle() {
+
+        String blacklager="IPA";
+
+        BeerStyle beerStyle = BeerStyle.IPA;
+
+        Page<BeerDTO> beerDTOS = beerClient.listBeers(blacklager,beerStyle,
+                null,null,null);
 
         assertThat(beerDTOS.getContent()).hasSize(25);
     }
