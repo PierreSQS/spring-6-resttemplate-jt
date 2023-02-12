@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Modified by Pierrot, 06.02.2023.
@@ -18,15 +19,18 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class BeerClientImpl implements BeerClient {
 
-    private static final String API_URL = "/api/v1/beer";
+    private static final String BEER_API_URL = "/api/v1/beer";
     private final RestTemplateBuilder restTemplateBuilder;
 
     @Override
     public Page<BeerDTO> listBeers() {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
+        // introduced URI-Builder for Query-Parameters later
+        UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromPath(BEER_API_URL);
+
         ResponseEntity<BeerDTOPageImpl> pageRespEntity =
-                restTemplate.getForEntity(API_URL, BeerDTOPageImpl.class);
+                restTemplate.getForEntity(uriComponentsBuilder.toUriString(), BeerDTOPageImpl.class);
 
         BeerDTOPageImpl respEntityBody = pageRespEntity.getBody();
         if (respEntityBody != null) {
