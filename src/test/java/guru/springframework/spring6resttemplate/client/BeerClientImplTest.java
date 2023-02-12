@@ -17,7 +17,17 @@ class BeerClientImplTest {
     @Test
     void listBeers() {
 
-        Page<BeerDTO> beerDTOS = beerClient.listBeers();
+        Page<BeerDTO> beerDTOS = beerClient.listBeers(null);
+
+        assertThat(beerDTOS.getContent()).hasSize(25);
+    }
+
+    @Test
+    void listBeersByBeerName() {
+
+        String blacklager="IPA";
+
+        Page<BeerDTO> beerDTOS = beerClient.listBeers(blacklager);
 
         assertThat(beerDTOS.getContent()).hasSize(25);
     }
