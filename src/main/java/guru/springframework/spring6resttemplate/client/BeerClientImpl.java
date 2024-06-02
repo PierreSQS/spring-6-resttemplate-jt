@@ -1,6 +1,5 @@
 package guru.springframework.spring6resttemplate.client;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import guru.springframework.spring6resttemplate.model.BeerDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,9 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Modified by Pierrot on 01-06-2024.
@@ -30,24 +26,12 @@ public class BeerClientImpl implements BeerClient {
     public Page<BeerDTO> listBeers() {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
-        ResponseEntity<String> stringResponseEntity =
-                restTemplate.getForEntity(BASE_URL + API_URL, String.class);
+        ResponseEntity<Page> stringResponseEntity =
+                restTemplate.getForEntity(BASE_URL + API_URL, Page.class);
 
         log.info("the content as String: {}", stringResponseEntity.getBody());
 
-        ResponseEntity<Map> mapResponseEntity =
-                restTemplate.getForEntity(BASE_URL + API_URL, Map.class);
 
-        log.info("the content as Map: {}", mapResponseEntity.getBody());
-
-        ResponseEntity<JsonNode> jsonNodeRespEntityEntity =
-                restTemplate.getForEntity(BASE_URL + API_URL, JsonNode.class);
-
-        log.info("##### the content as JsonNodes #####");
-        Objects.requireNonNull(jsonNodeRespEntityEntity.getBody())
-                .findPath("content")
-                .elements()
-                .forEachRemaining(jsonNode -> log.info(jsonNode.get("beerName").asText()));
 
         return null;
     }
