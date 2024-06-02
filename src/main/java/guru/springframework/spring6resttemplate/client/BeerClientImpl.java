@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -26,12 +27,10 @@ public class BeerClientImpl implements BeerClient {
     public Page<BeerDTO> listBeers() {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
-        ResponseEntity<Page> stringResponseEntity =
-                restTemplate.getForEntity(BASE_URL + API_URL, Page.class);
+        ResponseEntity<PageImpl> pageRespEntity =
+                restTemplate.getForEntity(BASE_URL + API_URL, PageImpl.class);
 
-        log.info("the content as String: {}", stringResponseEntity.getBody());
-
-
+        log.info("the content as String: {}", pageRespEntity.getBody());
 
         return null;
     }
