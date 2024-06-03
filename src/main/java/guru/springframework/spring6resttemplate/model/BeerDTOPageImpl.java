@@ -5,12 +5,12 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public class RestPageImpl<T> extends PageImpl<T> {
-    public RestPageImpl(List<T> content) {
+public class BeerDTOPageImpl<T> extends PageImpl<T> {
+    public BeerDTOPageImpl(List<T> content) {
         super(content);
     }
 
-    public RestPageImpl(List<T> content, Pageable pageable, long total) {
+    public BeerDTOPageImpl(List<T> content, Pageable pageable, long total) {
         super(content, pageable, total);
     }
 }
