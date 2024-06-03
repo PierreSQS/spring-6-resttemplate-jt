@@ -20,7 +20,6 @@ import java.util.Objects;
 @Service
 public class BeerClientImpl implements BeerClient {
 
-    public static final String BASE_URL = "http://localhost:8080";
     public static final String API_URL = "/api/v1/beer";
 
     private final RestTemplateBuilder restTemplateBuilder;
@@ -30,7 +29,7 @@ public class BeerClientImpl implements BeerClient {
         RestTemplate restTemplate = restTemplateBuilder.build();
 
         ResponseEntity<BeerDTOPageImpl> pageRespEntity =
-                restTemplate.getForEntity(BASE_URL + API_URL, BeerDTOPageImpl.class);
+                restTemplate.getForEntity(API_URL, BeerDTOPageImpl.class);
 
         log.info("the content as String: {}", Objects.requireNonNull(pageRespEntity.getBody()));
 
