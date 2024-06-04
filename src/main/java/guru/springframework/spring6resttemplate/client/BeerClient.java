@@ -4,6 +4,8 @@ import guru.springframework.spring6resttemplate.model.BeerDTO;
 import guru.springframework.spring6resttemplate.model.BeerStyle;
 import org.springframework.data.domain.Page;
 
+import java.util.UUID;
+
 /**
  * Created by Pierrot on 04-06-2024.
  */
@@ -14,4 +16,6 @@ public interface BeerClient {
                             Boolean showInventory, Integer pageNumber, Integer pageSize);
 
 
+
+    BeerDTO getBeerById(UUID beerId);
 }

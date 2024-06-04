@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Modified by Pierrot on 04-06-2024.
@@ -24,7 +25,15 @@ public class BeerClientImpl implements BeerClient {
 
     public static final String BEER_API_URL = "/api/v1/beer";
 
+    public static final String BEER_ID_API_URL = "/api/v1/beer/{beerID}";
+
     private final RestTemplateBuilder restTemplateBuilder;
+
+    @Override
+    public BeerDTO getBeerById(UUID beerUUID) {
+        RestTemplate restTemplate = restTemplateBuilder.build();
+        return restTemplate.getForObject(BEER_ID_API_URL, BeerDTO.class,beerUUID);
+    }
 
     @Override
     public Page<BeerDTO> listBeers() {
