@@ -14,9 +14,13 @@ class BeerClientImplTest {
     BeerClient beerClient;
 
     @Test
+    void listBeersNoBeerName() {
+
+        beerClient.listBeers(null);
+    }
+
+    @Test
     void listBeers() {
-        // At the moment, it is not possible to assert on the method result
-        // Since it a produces a null value !!!
-        beerClient.listBeers();
+        beerClient.listBeers("ALE");
     }
 }
