@@ -1,11 +1,17 @@
 package guru.springframework.spring6resttemplate.client;
 
 import guru.springframework.spring6resttemplate.model.BeerDTO;
+import guru.springframework.spring6resttemplate.model.BeerStyle;
 import org.springframework.data.domain.Page;
 
 /**
- * Created by Pierrot on 01-06-2024.
+ * Created by Pierrot on 04-06-2024.
  */
 public interface BeerClient {
-    Page<BeerDTO> listBeers(String beerName);
+    Page<BeerDTO> listBeers();
+
+    Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle,
+                            Boolean showInventory, Integer pageNumber, Integer pageSize);
+
+
 }
