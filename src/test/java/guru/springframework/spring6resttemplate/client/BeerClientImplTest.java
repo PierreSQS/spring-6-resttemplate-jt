@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Modified by Pierrot on 04-06-2024.
@@ -32,7 +31,7 @@ class BeerClientImplTest {
                 .build();
 
         BeerDTO savedDto = beerClient.createBeer(newDto);
-        assertNotNull(savedDto);
+        assertThat(savedDto).isNotNull();
     }
 
     @Test
