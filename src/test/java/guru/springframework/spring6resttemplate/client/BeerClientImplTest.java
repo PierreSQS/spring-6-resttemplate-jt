@@ -5,14 +5,17 @@ import guru.springframework.spring6resttemplate.model.BeerStyle;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Modified by Pierrot on 04-06-2024.
+ * Modified by Pierrot on 06-06-2024.
  */
 @SpringBootTest
 class BeerClientImplTest {
@@ -20,6 +23,26 @@ class BeerClientImplTest {
     @Autowired
     BeerClient beerClient;
 
+    @Test
+    void testDeleteBeer() {
+
+        BeerDTO newDto = BeerDTO.builder()
+                .price(new BigDecimal("10.99"))
+                .beerName("Beer to delete")
+                .beerStyle(BeerStyle.IPA)
+                .quantityOnHand(500)
+                .upc("123245")
+                .build();
+
+        BeerDTO beerDto = beerClient.createBeer(newDto);
+
+        UUID beerDtoId = beerDto.getId();
+        beerClient.deleteBeer(beerDtoId);
+
+        assertThatExceptionOfType(HttpClientErrorException.class)
+                .isThrownBy(() -> beerClient.deleteBeer(beerDtoId))
+                .withMessageContaining("Not Found");
+    }
 
     @Test
     void testUpdateBeer() {
