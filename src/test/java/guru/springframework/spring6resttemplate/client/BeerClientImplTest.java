@@ -5,6 +5,7 @@ import guru.springframework.spring6resttemplate.model.BeerStyle;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
@@ -92,12 +93,17 @@ class BeerClientImplTest {
     @Test
     void listBeersNoBeerName() {
 
-        beerClient.listBeers();
+        Page<BeerDTO> beerDTOS = beerClient.listBeers();
+
+        assertThat(beerDTOS.getContent()).hasSize(25);
     }
 
     @Test
     void listBeers() {
 
-        beerClient.listBeers("ALE", BeerStyle.ALE, Boolean.FALSE, 0, 25);
+        Page<BeerDTO> beerDTOS =
+                beerClient.listBeers("ALE", BeerStyle.ALE, Boolean.FALSE, 0, 25);
+
+        assertThat(beerDTOS.getContent()).hasSize(25);
     }
 }
