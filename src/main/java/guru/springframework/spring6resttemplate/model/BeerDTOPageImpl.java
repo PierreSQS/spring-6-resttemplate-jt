@@ -1,6 +1,7 @@
 package guru.springframework.spring6resttemplate.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -9,8 +10,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 /**
- * Modified by Pierrot on 03-06-2024.
+ * Modified by Pierrot on 09-06-2024.
  */
+@JsonIgnoreProperties(ignoreUnknown = true, value = "pageable")
 public class BeerDTOPageImpl extends PageImpl<guru.springframework.spring6resttemplate.model.BeerDTO> {
     public BeerDTOPageImpl(List<guru.springframework.spring6resttemplate.model.BeerDTO> content) {
         super(content);
