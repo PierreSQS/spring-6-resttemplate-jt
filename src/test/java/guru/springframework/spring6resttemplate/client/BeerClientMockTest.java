@@ -64,7 +64,7 @@ class BeerClientMockTest {
     }
 
     @Test
-    void testGetById() throws JsonProcessingException {
+    void testGetByBeerId() throws JsonProcessingException {
 
         BeerDTO beerDTOToFind = getBeerDto();
 
