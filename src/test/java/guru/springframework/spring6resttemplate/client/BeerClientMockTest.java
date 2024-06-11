@@ -55,56 +55,55 @@ class BeerClientMockTest {
 
     @Mock
     RestTemplateBuilder mockRestTemplateBuilder = new RestTemplateBuilder(new MockServerRestTemplateCustomizer());
+    
+    BeerDTO beerDTO;
+    
+    String jsonResponse;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws JsonProcessingException{
         RestTemplate restTemplate = restTemplateBuilderSpringConfigured.build();
         server = MockRestServiceServer.bindTo(restTemplate).build();
 
         when(mockRestTemplateBuilder.build()).thenReturn(restTemplate);
 
         beerClient = new BeerClientImpl(mockRestTemplateBuilder);
-    }
+
+        beerDTO = getBeerDto();
+
+        jsonResponse = objectMapper.writeValueAsString(beerDTO);}
 
     @Test
-    void testCreateBeer() throws JsonProcessingException {
-
-        BeerDTO beerDtoToCreate = getBeerDto();
-
-        String response = objectMapper.writeValueAsString(beerDtoToCreate);
+    void testCreateBeer() {
 
         URI uri = UriComponentsBuilder.fromPath(BeerClientImpl.BEER_ID_API_URL)
-                .build(beerDtoToCreate.getId());
+                .build(beerDTO.getId());
 
         server.expect(method(HttpMethod.POST))
                 .andExpect(requestTo(URL + BeerClientImpl.BEER_API_URL))
                 .andRespond(withAccepted().location(uri));
 
         server.expect(method(HttpMethod.GET))
-                .andExpect(requestToUriTemplate(URL + BeerClientImpl.BEER_ID_API_URL,beerDtoToCreate.getId()))
-                .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
+                .andExpect(requestToUriTemplate(URL + BeerClientImpl.BEER_ID_API_URL, beerDTO.getId()))
+                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
 
-        BeerDTO responseBeerDTO = beerClient.createBeer(beerDtoToCreate);
+        BeerDTO responseBeerDTO = beerClient.createBeer(beerDTO);
 
         System.out.println(responseBeerDTO.toString());
 
-        assertThat(responseBeerDTO.getBeerName()).isEqualTo(beerDtoToCreate.getBeerName());
+        assertThat(responseBeerDTO.getBeerName()).isEqualTo(beerDTO.getBeerName());
     }
 
     @Test
-    void testGetByBeerId() throws JsonProcessingException {
-
-        BeerDTO beerDTOToFind = getBeerDto();
-
-        String response = objectMapper.writeValueAsString(beerDTOToFind);
+    void testGetByBeerId() {
 
         server.expect(method(HttpMethod.GET))
-                .andExpect(requestToUriTemplate(URL + BeerClientImpl.BEER_ID_API_URL,beerDTOToFind.getId()))
-                .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
+                .andExpect(requestToUriTemplate(URL + BeerClientImpl.BEER_ID_API_URL,beerDTO.getId()))
+                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
 
-        BeerDTO foundBeerDTO = beerClient.getBeerById(beerDTOToFind.getId());
+        BeerDTO foundBeerDTO = beerClient.getBeerById(beerDTO.getId());
 
-        assertThat(foundBeerDTO.getBeerName()).isEqualTo(beerDTOToFind.getBeerName());
+        assertThat(foundBeerDTO.getBeerName()).isEqualTo(beerDTO.getBeerName());
     }
 
     @Test
