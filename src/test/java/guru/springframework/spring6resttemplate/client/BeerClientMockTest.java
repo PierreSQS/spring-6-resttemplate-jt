@@ -76,6 +76,25 @@ class BeerClientMockTest {
     }
 
     @Test
+    void testDeleteBeer() {
+        // WHEN
+
+        // Mock Server DELETE
+        server.expect(method(HttpMethod.DELETE))
+                .andExpect(requestToUriTemplate(URL+BeerClientImpl.BEER_ID_API_URL, beerDTO.getId()))
+                .andRespond(withNoContent());
+
+        // THEN
+
+        // Make the DELETE Call to Server
+        beerClient.deleteBeer(beerDTO.getId());
+
+        // Verify that the previous call occurred
+        // since the DELETE operation is a Void operation
+        server.verify();
+    }
+
+    @Test
     void testUpdateBeer() {
 
         // WHEN
