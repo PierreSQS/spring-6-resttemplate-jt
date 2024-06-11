@@ -32,10 +32,11 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestToUriTemplate;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withAccepted;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withNoContent;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 /**
- * Modified by Pierrot on 10-06-2024.
+ * Modified by Pierrot on 12-06-2024.
  */
 @RestClientTest
 @Import(RestTemplateBuilderConfig.class)
@@ -71,7 +72,30 @@ class BeerClientMockTest {
 
         beerDTO = getBeerDto();
 
-        jsonResponse = objectMapper.writeValueAsString(beerDTO);}
+        jsonResponse = objectMapper.writeValueAsString(beerDTO);
+    }
+
+    @Test
+    void testUpdateBeer() {
+
+        // WHEN
+
+        // Mock Server PUT
+        server.expect(method(HttpMethod.PUT))
+                .andExpect(requestToUriTemplate(URL+BeerClientImpl.BEER_ID_API_URL, beerDTO.getId()))
+                .andRespond(withNoContent());
+
+        // As the name says, Mock Server GET
+        mockGetOperation();
+
+        // THEN
+
+        // Make the PUT Call to Server
+        BeerDTO updateBeerDTO = beerClient.updateBeer(this.beerDTO);
+
+        // ASSERT
+        assertThat(updateBeerDTO.getId()).isEqualTo(beerDTO.getId());
+    }
 
     @Test
     void testCreateBeer() {
