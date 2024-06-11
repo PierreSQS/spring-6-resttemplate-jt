@@ -83,9 +83,7 @@ class BeerClientMockTest {
                 .andExpect(requestTo(URL + BeerClientImpl.BEER_API_URL))
                 .andRespond(withAccepted().location(uri));
 
-        server.expect(method(HttpMethod.GET))
-                .andExpect(requestToUriTemplate(URL + BeerClientImpl.BEER_ID_API_URL, beerDTO.getId()))
-                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
+        mockGetOperation();
 
         BeerDTO responseBeerDTO = beerClient.createBeer(beerDTO);
 
@@ -97,13 +95,17 @@ class BeerClientMockTest {
     @Test
     void testGetByBeerId() {
 
-        server.expect(method(HttpMethod.GET))
-                .andExpect(requestToUriTemplate(URL + BeerClientImpl.BEER_ID_API_URL,beerDTO.getId()))
-                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
+        mockGetOperation();
 
         BeerDTO foundBeerDTO = beerClient.getBeerById(beerDTO.getId());
 
         assertThat(foundBeerDTO.getBeerName()).isEqualTo(beerDTO.getBeerName());
+    }
+
+    private void mockGetOperation() {
+        server.expect(method(HttpMethod.GET))
+                .andExpect(requestToUriTemplate(URL + BeerClientImpl.BEER_ID_API_URL,beerDTO.getId()))
+                .andRespond(withSuccess(jsonResponse, MediaType.APPLICATION_JSON));
     }
 
     @Test
