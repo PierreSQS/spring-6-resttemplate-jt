@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -27,12 +28,14 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestToUriTemplate;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withAccepted;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withNoContent;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withResourceNotFound;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 /**
@@ -76,16 +79,35 @@ class BeerClientMockTest {
     }
 
     @Test
+    void testDeleteBeerNotFound() {
+        // WHEN
+        // Mock Server DELETE
+        server.expect(method(HttpMethod.DELETE))
+                .andExpect(requestToUriTemplate(URL+BeerClientImpl.BEER_ID_API_URL, beerDTO.getId()))
+                .andRespond(withResourceNotFound());
+
+        UUID id = beerDTO.getId();
+
+        // THEN
+        // Assert that Exception is thrown when making the DELETE Call to Server
+        assertThatExceptionOfType(HttpClientErrorException.class)
+                .isThrownBy(() -> beerClient.deleteBeer(id))
+                .withMessageContaining("404 Not Found");
+
+        // verify call to server occurred
+        server.verify();
+
+    }
+
+    @Test
     void testDeleteBeer() {
         // WHEN
-
         // Mock Server DELETE
         server.expect(method(HttpMethod.DELETE))
                 .andExpect(requestToUriTemplate(URL+BeerClientImpl.BEER_ID_API_URL, beerDTO.getId()))
                 .andRespond(withNoContent());
 
         // THEN
-
         // Make the DELETE Call to Server
         beerClient.deleteBeer(beerDTO.getId());
 
@@ -98,7 +120,6 @@ class BeerClientMockTest {
     void testUpdateBeer() {
 
         // WHEN
-
         // Mock Server PUT
         server.expect(method(HttpMethod.PUT))
                 .andExpect(requestToUriTemplate(URL+BeerClientImpl.BEER_ID_API_URL, beerDTO.getId()))
@@ -108,7 +129,6 @@ class BeerClientMockTest {
         mockGetOperation();
 
         // THEN
-
         // Make the PUT Call to Server
         BeerDTO updateBeerDTO = beerClient.updateBeer(this.beerDTO);
 
