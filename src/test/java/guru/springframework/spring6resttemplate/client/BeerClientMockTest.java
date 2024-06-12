@@ -31,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.queryParam;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestToUriTemplate;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withAccepted;
@@ -76,6 +77,30 @@ class BeerClientMockTest {
         beerDTO = getBeerDto();
 
         jsonResponse = objectMapper.writeValueAsString(beerDTO);
+    }
+
+
+    @Test
+    void testListBeersWithQueryParams() throws JsonProcessingException {
+        // WHEN
+        String response = objectMapper.writeValueAsString(getPage());
+
+        URI uri = UriComponentsBuilder.fromHttpUrl(URL + BeerClientImpl.BEER_API_URL)
+                .queryParam("beerName","ALE")
+                .build()
+                .toUri();
+
+        // Mock Server DELETE
+        server.expect(method(HttpMethod.GET))
+                .andExpect(requestTo(uri))
+                .andExpect(queryParam("beerName","ALE"))
+                .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
+
+        // THEN
+        Page<BeerDTO> beerDTOPage = beerClient
+                .listBeers("ALE", null, null, null, null);
+
+        assertThat(beerDTOPage.getContent()).isNotEmpty();
     }
 
     @Test
