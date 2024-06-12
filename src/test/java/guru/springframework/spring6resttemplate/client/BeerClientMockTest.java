@@ -205,7 +205,7 @@ class BeerClientMockTest {
                 .andRespond(withSuccess(payload, MediaType.APPLICATION_JSON));
 
         Page<BeerDTO> dtos = beerClient.listBeers();
-        assertThat(dtos.getContent()).isNotEmpty();
+        assertThat(dtos.getContent()).hasSize(1);
     }
 
     BeerDTO getBeerDto(){
