@@ -95,7 +95,7 @@ public class BeerClientImpl implements BeerClient {
             uriComponentsBuilder.queryParam("pageNumber", pageNumber);
         }
 
-        if (beerName != null) {
+        if (pageSize != null) {
             uriComponentsBuilder.queryParam("pageSize", pageSize);
         }
 
