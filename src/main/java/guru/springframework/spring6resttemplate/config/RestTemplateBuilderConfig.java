@@ -8,13 +8,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 /**
- * Modified by Pierrot on 04-06-2024.
+ * Re-Modified by Pierrot on 17-06-2024.
  */
 @Configuration
 public class RestTemplateBuilderConfig {
 
     @Value("${rest.template.rootURL}")
     String rootUrl;
+
+    @Value("${rest.template.user}")
+    String user;
+
+    @Value("${rest.template.password}")
+    String password;
 
     @Bean
     RestTemplateBuilder restTemplateBuilder(RestTemplateBuilderConfigurer configurer) {
@@ -24,6 +30,8 @@ public class RestTemplateBuilderConfig {
         RestTemplateBuilder builder = configurer.configure(new RestTemplateBuilder());
         DefaultUriBuilderFactory builderFactory = new DefaultUriBuilderFactory(rootUrl);
 
-        return builder.uriTemplateHandler(builderFactory);
+        RestTemplateBuilder builderWithAuth = builder.basicAuthentication(user, password);
+
+        return builderWithAuth.uriTemplateHandler(builderFactory);
     }
 }
