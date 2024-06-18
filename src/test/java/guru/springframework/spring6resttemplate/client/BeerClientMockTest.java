@@ -99,10 +99,10 @@ class BeerClientMockTest {
                 .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
 
         // THEN
-        Page<BeerDTO> beerDTOPage = beerClient
+        Page<BeerDTO> responsePage = beerClient
                 .listBeers("ALE", null, null, null, null);
 
-        assertThat(beerDTOPage.getContent()).isNotEmpty();
+        assertThat(responsePage.getContent()).isNotEmpty();
     }
 
     @Test
