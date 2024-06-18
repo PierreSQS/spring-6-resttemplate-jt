@@ -24,7 +24,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.net.URI;
-import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,11 +34,11 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 18.06.2024.
  */
 @RestClientTest
 @Import(RestTemplateBuilderConfig.class)
-public class BeerClientMockTest {
+class BeerClientMockTest {
 
     static final String URL = "http://localhost:8080";
 
@@ -85,7 +85,7 @@ public class BeerClientMockTest {
         Page<BeerDTO> responsePage = beerClient
                 .listBeers("ALE", null, null, null, null);
 
-        assertThat(responsePage.getContent().size()).isEqualTo(1);
+        assertThat(responsePage.getContent()).hasSize(1);
     }
 
     @Test
@@ -95,9 +95,8 @@ public class BeerClientMockTest {
                         dto.getId()))
                 .andRespond(withResourceNotFound());
 
-        assertThrows(HttpClientErrorException.class, () -> {
-            beerClient.deleteBeer(dto.getId());
-        });
+        UUID beerUUID = dto.getId();
+        assertThrows(HttpClientErrorException.class, () -> beerClient.deleteBeer(beerUUID));
 
         server.verify();
     }
@@ -168,7 +167,7 @@ public class BeerClientMockTest {
                 .andRespond(withSuccess(payload, MediaType.APPLICATION_JSON));
 
         Page<BeerDTO> dtos = beerClient.listBeers();
-        assertThat(dtos.getContent().size()).isGreaterThan(0);
+        assertThat(dtos.getContent()).isNotEmpty();
     }
 
     BeerDTO getBeerDto(){
@@ -182,7 +181,7 @@ public class BeerClientMockTest {
                 .build();
     }
 
-    BeerDTOPageImpl getPage(){
-        return new BeerDTOPageImpl(Arrays.asList(getBeerDto()), 1, 25, 1);
+    BeerDTOPageImpl<BeerDTO> getPage(){
+        return new BeerDTOPageImpl<>(List.of(getBeerDto()), 1, 25, 1);
     }
 }
