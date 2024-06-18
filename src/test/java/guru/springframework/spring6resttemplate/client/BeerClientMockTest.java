@@ -30,6 +30,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.header;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.queryParam;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
@@ -40,7 +41,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 /**
- * Modified by Pierrot on 12-06-2024.
+ * Modified by Pierrot on 18-06-2024.
  */
 @RestClientTest
 @Import(RestTemplateBuilderConfig.class)
@@ -94,6 +95,7 @@ class BeerClientMockTest {
         server.expect(method(HttpMethod.GET))
                 .andExpect(requestTo(uri))
                 .andExpect(queryParam("beerName","ALE"))
+                .andExpect(header("Authorization","Basic dXNlcjE6cGFzc3dvcmQ="))
                 .andRespond(withSuccess(response, MediaType.APPLICATION_JSON));
 
         // THEN
