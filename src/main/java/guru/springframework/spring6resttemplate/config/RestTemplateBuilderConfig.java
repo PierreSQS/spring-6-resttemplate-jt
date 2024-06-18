@@ -8,15 +8,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot, 18.06.2024.
  */
 @Configuration
 public class RestTemplateBuilderConfig {
 
-    @Value("user")
-    private String username;
-    @Value("password")
-    private String password;
+    @Value("${rest.template.user}")
+    String username;
+    @Value("${rest.template.password}")
+    String password;
     @Value("${rest.template.rootUrl}")
     String rootUrl;
 
