@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 14-10-2024.
  */
 @Configuration
 public class RestTemplateBuilderConfig {

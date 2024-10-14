@@ -4,6 +4,7 @@ import guru.springframework.spring6resttemplate.model.BeerDTO;
 import guru.springframework.spring6resttemplate.model.BeerDTOPageImpl;
 import guru.springframework.spring6resttemplate.model.BeerStyle;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,13 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 14-10-2024.
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class BeerClientImpl implements BeerClient {
@@ -88,6 +91,8 @@ public class BeerClientImpl implements BeerClient {
 
         ResponseEntity<BeerDTOPageImpl> response =
                 restTemplate.getForEntity(uriComponentsBuilder.toUriString() , BeerDTOPageImpl.class);
+
+        log.info("the Response as String: {}", Objects.requireNonNull(response));
 
 
         return response.getBody();
