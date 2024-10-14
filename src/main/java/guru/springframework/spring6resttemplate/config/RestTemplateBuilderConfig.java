@@ -11,6 +11,8 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProvider
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.zalando.logbook.Logbook;
+import org.zalando.logbook.spring.LogbookClientHttpRequestInterceptor;
 
 /**
  * Modified by Pierrot on 14-10-2024.
@@ -40,8 +42,11 @@ public class RestTemplateBuilderConfig {
 
         assert rootUrl != null;
 
+        LogbookClientHttpRequestInterceptor logbookInterceptor =
+                new LogbookClientHttpRequestInterceptor(Logbook.builder().build());
+
         return configurer.configure(new RestTemplateBuilder())
-                .additionalInterceptors(interceptor)
+                .additionalInterceptors(interceptor, logbookInterceptor)
                 .uriTemplateHandler(new DefaultUriBuilderFactory(rootUrl));
     }
 }
