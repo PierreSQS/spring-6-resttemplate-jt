@@ -38,7 +38,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.time.Instant;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,7 +49,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.*;
 
 /**
- * Created by jt, Spring Framework Guru.
+ * Modified by Pierrot on 14-10-2024.
  */
 @RestClientTest
 @Import(RestTemplateBuilderConfig.class)
@@ -140,7 +140,7 @@ public class BeerClientMockTest {
         Page<BeerDTO> responsePage = beerClient
                 .listBeers("ALE", null, null, null, null);
 
-        assertThat(responsePage.getContent().size()).isEqualTo(1);
+        assertThat(responsePage.getContent()).hasSize(1);
     }
 
     @Test
@@ -151,9 +151,8 @@ public class BeerClientMockTest {
                 .andExpect(header("Authorization", BEARER_TEST))
                 .andRespond(withResourceNotFound());
 
-        assertThrows(HttpClientErrorException.class, () -> {
-            beerClient.deleteBeer(dto.getId());
-        });
+        UUID beerId = dto.getId();
+        assertThrows(HttpClientErrorException.class, () -> beerClient.deleteBeer(beerId));
 
         server.verify();
     }
@@ -228,7 +227,7 @@ public class BeerClientMockTest {
                 .andRespond(withSuccess(payload, MediaType.APPLICATION_JSON));
 
         Page<BeerDTO> dtos = beerClient.listBeers();
-        assertThat(dtos.getContent().size()).isGreaterThan(0);
+        assertThat(dtos.getContent()).isNotEmpty();
     }
 
     BeerDTO getBeerDto(){
@@ -243,6 +242,6 @@ public class BeerClientMockTest {
     }
 
     BeerDTOPageImpl getPage(){
-        return new BeerDTOPageImpl(Arrays.asList(getBeerDto()), 1, 25, 1);
+        return new BeerDTOPageImpl(Collections.singletonList(getBeerDto()), 1, 25, 1);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,9 +33,11 @@ class BeerClientImplTest {
 
         beerClient.deleteBeer(beerDto.getId());
 
+        //should error
+        UUID beerDtoId = beerDto.getId();
+
         assertThrows(HttpClientErrorException.class, () -> {
-            //should error
-            beerClient.getBeerById(beerDto.getId());
+            beerClient.getBeerById(beerDtoId);
         });
     }
 
@@ -78,7 +81,7 @@ class BeerClientImplTest {
 
         Page<BeerDTO> beerDTOS = beerClient.listBeers();
 
-        BeerDTO dto = beerDTOS.getContent().get(0);
+        BeerDTO dto = beerDTOS.getContent().getFirst();
 
         BeerDTO byId = beerClient.getBeerById(dto.getId());
 
